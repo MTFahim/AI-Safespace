@@ -1,21 +1,18 @@
 import streamlit as st
 
-# 1. KONFIGURASI HALAMAN UTAMA
 st.set_page_config(
     page_title="AI SafeSpace",
     layout="wide",
     initial_sidebar_state="collapsed" 
 )
 
-# 2. FUNGSI UNTUK MEMUAT FILE CSS EKSTERNAL
 def load_css(file_name):
     with open(file_name) as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-# Panggil fungsi untuk mengaplikasikan style.css
 load_css("style.css")
 
-# 2.5 SIDEBAR MENU KUSTOM
+# SIDEBAR MENU 
 with st.sidebar:
     # Sidebar Header
     st.markdown("""
@@ -24,7 +21,6 @@ with st.sidebar:
 </div>
     """, unsafe_allow_html=True)
     
-    # Sidebar Menu Items (TANPA SPASI DI AWAL BARIS HTML-nya)
     st.markdown("""
 <div class="sidebar-menu">
     <a href="/" target="_self" class="sidebar-link">
@@ -54,8 +50,7 @@ with st.sidebar:
 </div>
     """, unsafe_allow_html=True)
 
-
-# 3. RENDER CUSTOM HEADER
+# HEADER
 st.markdown("""
 <div class="header-container">
     <div class="header-left">
@@ -67,7 +62,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# 4. RENDER HERO CARD 
+# HERO CARD 
 st.markdown("""
 <div class="hero-card">
     <h1>Halo, Selamat Datang di Ruang Amanmu</h1>
@@ -80,7 +75,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# 5. RENDER NAV-CARDS GRID (3 KOLOM)
+# RENDER NAV-CARDS GRID
 col_jurnal, col_mood, col_riwayat = st.columns(3)
 
 with col_jurnal:

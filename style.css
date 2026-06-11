@@ -1,27 +1,20 @@
 /* Import Font Resmi */
 @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700&family=Quicksand:wght@600&display=swap');
 
-/* Terapkan font & warna latar belakang dasar */
+/* font & warna latar belakang dasar */
 html, body, [data-testid="stAppViewContainer"] {
     font-family: 'Nunito Sans', sans-serif;
     background-color: #FAF8F5 !important; 
 }
 
-/* =========================================
-   1. MERETAS HEADER & MENU STREAMLIT TERBARU
-   ========================================= */
-
-/* Membuat header bawaan transparan */
 header[data-testid="stHeader"] {
     background-color: transparent !important;
 }
 
-/* Sembunyikan menu navigasi bawaan Streamlit agar tidak ganda */
 [data-testid="stSidebarNav"], [data-testid="stSidebarNavItems"] {
     display: none !important;
 }
 
-/* Sembunyikan isi tombol menu bawaan (teks Material Symbols) */
 [data-testid="collapsedControl"] *, 
 [data-testid="stSidebarCollapsedControl"] * {
     color: transparent !important;
@@ -30,7 +23,6 @@ header[data-testid="stHeader"] {
     display: none !important;
 }
 
-/* Suntikkan Ikon Lucide Menu ke tombol kontrol tersebut */
 [data-testid="collapsedControl"], 
 [data-testid="stSidebarCollapsedControl"] {
     background-image: url('https://unpkg.com/lucide-static@latest/icons/menu.svg') !important;
@@ -46,8 +38,6 @@ header[data-testid="stHeader"] {
     margin-left: 10px !important;
 }
 
-/* --- MERETAS TOMBOL TUTUP SIDEBAR (ANTI MACET) --- */
-/* Gunakan font-size 0 dan color transparent agar teks hilang tapi tombol tetap bisa diklik */
 [data-testid="stSidebarCollapseButton"] * {
     color: transparent !important;
     fill: transparent !important;
@@ -65,14 +55,12 @@ header[data-testid="stHeader"] {
     cursor: pointer !important;
 }
 
-/* =========================================
-   2. STYLING CUSTOM SIDEBAR
-   ========================================= */
+/* STYLING CUSTOM SIDEBAR */
 
 /* Sidebar Background & Teks Global */
 [data-testid="stSidebar"] {
     background-color: #EFF2F0 !important;
-    overflow-x: hidden !important; /* <--- KUNCI PENGHILANG SCROLLBAR HORIZONTAL */
+    overflow-x: hidden !important; 
 }
 [data-testid="stSidebar"] * {
     font-family: 'Quicksand', sans-serif;
@@ -80,10 +68,9 @@ header[data-testid="stHeader"] {
     color: #2F595A !important;
 }
 
-/* Mengurangi jarak kosong (padding) di bagian atas sidebar */
 [data-testid="stSidebarUserContent"] {
     padding-top: 1rem !important;
-    overflow-x: hidden !important; /* <--- KUNCI PENGHILANG SCROLLBAR HORIZONTAL */
+    overflow-x: hidden !important; 
 }
 
 /* Styling Judul Sidebar */
@@ -98,12 +85,12 @@ header[data-testid="stHeader"] {
     color: #2F595A;
 }
 
-/* Styling Tautan (Hilangkan garis bawah) */
+/* Styling Tautan  */
 .sidebar-link {
     text-decoration: none !important;
 }
 
-/* Styling Kotak Menu (Bentuk, Font, Animasi) */
+/* Styling Kotak Menu  */
 .sidebar-item {
     display: flex;
     align-items: center;
@@ -140,9 +127,7 @@ header[data-testid="stHeader"] {
     filter: invert(18%) sepia(21%) saturate(1832%) hue-rotate(134deg) brightness(95%) contrast(92%);
 }
 
-/* =========================================
-   3. STYLING KONTEN UTAMA (HOME)
-   ========================================= */
+/* STYLING KONTEN UTAMA (HOME)*/
 
 .header-container {
     display: flex;
