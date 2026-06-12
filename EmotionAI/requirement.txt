@@ -1,9 +1,0 @@
-google-genai
-streamlit
-pandas
-numpy
-scikit-learn
-joblib
-python-dotenv
-deep-translator
-nltk
