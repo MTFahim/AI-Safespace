@@ -1,0 +1,511 @@
+# Chatbot + Emotion AI Module Documentation
+
+## Tujuan Modul
+
+Modul ini bertugas untuk:
+
+1. Menganalisis emosi pengguna dari jurnal dan pesan chat menggunakan Emotion AI.
+2. Membangun konteks percakapan berdasarkan:
+
+   * Jurnal terakhir pengguna.
+   * Emosi pesan saat ini.
+   * Riwayat percakapan.
+3. Menghasilkan respon AI menggunakan Gemini.
+4. Menyimpan log hasil deteksi emosi untuk evaluasi model.
+
+---
+
+# Struktur Folder
+
+```text
+chatbot/
+│
+├── chatbot_engine.py
+├── prompt_builder.py
+├── config.py
+├── journal_context.py
+└── emotion_logger.py
+
+emotion_ai/
+│
+├── mentalhealthanalyzer.py
+├── emotionanalyzer.py
+├── riskanalyzer.py
+└── translator.py
+
+data/
+└── latest_journal.json
+
+logs/
+└── emotion_log.csv
+```
+
+---
+
+# Alur Sistem
+
+```text
+Jurnal
+ ↓
+Emotion AI
+ ↓
+Journal Profile
+
+=================
+
+Chat User
+ ↓
+Translator
+ ↓
+Emotion AI
+ ↓
+Current Emotion
+
+=================
+
+Journal Profile
++
+Current Emotion
++
+Conversation History
+ ↓
+Prompt Builder
+ ↓
+Gemini
+ ↓
+Response
+```
+
+---
+
+# BAGIAN YANG MASIH DUMMY
+
+Saat ini sistem belum terhubung dengan database backend.
+
+File berikut masih menggunakan data dummy:
+
+```text
+data/latest_journal.json
+```
+
+Contoh:
+
+```json
+{
+  "journal_text":
+  "Saya merasa cemas menghadapi sidang minggu depan."
+}
+```
+
+---
+
+# Integrasi Backend
+
+## Mengganti Dummy Journal
+
+Saat backend selesai, file:
+
+```python
+chatbot/journal_context.py
+```
+
+tidak perlu lagi membaca:
+
+```text
+data/latest_journal.json
+```
+
+melainkan mengambil data dari:
+
+```python
+database
+```
+
+atau
+
+```python
+API Backend
+```
+
+---
+
+Fungsi yang perlu diperhatikan:
+
+```python
+load_journal_profile()
+```
+
+Saat ini:
+
+```python
+load_journal_profile()
+↓
+latest_journal.json
+```
+
+Nantinya:
+
+```python
+load_journal_profile()
+↓
+database
+```
+
+---
+
+# Integrasi Frontend
+
+Frontend tidak perlu mengakses Gemini secara langsung.
+
+Frontend cukup:
+
+```python
+user_message
+↓
+generate_response()
+↓
+response
+```
+
+---
+
+Fungsi utama:
+
+```python
+generate_response()
+```
+
+Lokasi:
+
+```python
+chatbot/chatbot_engine.py
+```
+
+Contoh:
+
+```python
+response = generate_response(
+    user_input,
+    journal_profile,
+    current_analysis,
+    conversation_history
+)
+```
+
+Output:
+
+```python
+str
+```
+
+---
+
+# File Penting
+
+## chatbot_engine.py
+
+Tugas:
+
+* Menghubungkan Gemini API.
+* Mengirim prompt ke Gemini.
+* Mengembalikan hasil respon AI.
+
+Fungsi utama:
+
+```python
+generate_response()
+```
+
+Output:
+
+```python
+string
+```
+
+---
+
+## prompt_builder.py
+
+Tugas:
+
+* Menyusun prompt yang dikirim ke Gemini.
+
+Menggabungkan:
+
+* Journal Profile
+* Current Emotion
+* Conversation History
+* User Message
+
+Jika ingin mengubah gaya bicara AI:
+
+Edit file ini.
+
+---
+
+## config.py
+
+Tugas:
+
+Menyimpan konfigurasi chatbot.
+
+Contoh:
+
+```python
+MODEL_NAME
+TEMPERATURE
+MAX_HISTORY
+```
+
+---
+
+## journal_context.py
+
+Tugas:
+
+Mengambil jurnal terakhir pengguna.
+
+Saat ini:
+
+```python
+latest_journal.json
+```
+
+Nantinya:
+
+```python
+database
+```
+
+---
+
+## emotion_logger.py
+
+Tugas:
+
+Menyimpan hasil deteksi emosi.
+
+Output:
+
+```text
+logs/emotion_log.csv
+```
+
+---
+
+# Emotion AI
+
+## translator.py
+
+Tugas:
+
+Menerjemahkan teks Indonesia menjadi Inggris sebelum diproses model.
+
+Alur:
+
+```text
+Indonesia
+↓
+Translator
+↓
+English
+↓
+Emotion AI
+```
+
+---
+
+Jika suatu hari model Emotion AI sudah mendukung Bahasa Indonesia:
+
+File yang perlu diubah hanya:
+
+```python
+emotion_ai/translator.py
+```
+
+---
+
+## mentalhealthanalyzer.py
+
+File utama Emotion AI.
+
+Fungsi utama:
+
+```python
+analyze_user(text)
+```
+
+Output:
+
+```python
+{
+    "original_text": "...",
+    "translated_text": "...",
+
+    "emotion": "...",
+
+    "mood_category": "...",
+
+    "risk_level": "...",
+
+    "mental_health_status": "..."
+}
+```
+
+---
+
+Semua modul lain menggunakan fungsi ini.
+
+---
+
+# Emotion Log
+
+File:
+
+```text
+logs/emotion_log.csv
+```
+
+Tujuan:
+
+* Evaluasi Emotion AI.
+* Debugging hasil klasifikasi.
+* Validasi hasil translator.
+
+Contoh:
+
+```csv
+timestamp,
+source,
+original_text,
+translated_text,
+emotion,
+mood_category,
+risk_level
+```
+
+---
+
+# Menghilangkan Debug Translation
+
+Saat ini translator dapat menampilkan:
+
+```text
+=== TRANSLATION ===
+I am afraid of my thesis defense.
+```
+
+Output ini hanya untuk debugging.
+
+Untuk menghapusnya:
+
+Buka:
+
+```python
+emotion_ai/mentalhealthanalyzer.py
+```
+
+Cari:
+
+```python
+print("=== TRANSLATION ===")
+print(translated_text)
+```
+
+Lalu hapus atau comment.
+
+---
+
+# Untuk Tim QA
+
+## File Yang Perlu Dicek
+
+Emotion AI:
+
+```python
+emotion_ai/
+```
+
+Chatbot:
+
+```python
+chatbot/
+```
+
+Log:
+
+```text
+logs/emotion_log.csv
+```
+
+---
+
+## Cara Validasi
+
+Input:
+
+```text
+Saya takut menghadapi sidang.
+```
+
+Expected:
+
+```text
+Emotion:
+fear
+```
+
+---
+
+Input:
+
+```text
+Hari ini saya sangat senang.
+```
+
+Expected:
+
+```text
+Emotion:
+joy
+```
+
+---
+
+Jika hasil berbeda jauh:
+
+Periksa:
+
+1. Translator.
+2. Emotion AI.
+3. Dataset model.
+
+---
+
+# Fungsi Utama Untuk Integrasi
+
+Emotion Analysis:
+
+```python
+analyze_user(text)
+```
+
+Menghasilkan respon AI:
+
+```python
+generate_response(...)
+```
+
+Mengambil jurnal:
+
+```python
+load_journal_profile()
+```
+
+Menyimpan log:
+
+```python
+save_emotion_log(...)
+```
+
+Modul lain sebaiknya hanya menggunakan fungsi-fungsi di atas dan tidak mengakses implementasi internal secara langsung.
