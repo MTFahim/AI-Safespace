@@ -1,13 +1,14 @@
 from database.connection import get_connection
 
-def save_journal(user_id, content):
+def save_journal(content):
+
     conn = get_connection()
     cur = conn.cursor()
 
     cur.execute("""
-        INSERT INTO journals (user_id, content)
-        VALUES (%s, %s)
-    """, (user_id, content))
+        INSERT INTO journals(content)
+        VALUES(%s)
+    """, (content,))
 
     conn.commit()
 
