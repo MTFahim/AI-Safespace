@@ -7,7 +7,6 @@ st.set_page_config(
 )
 
 def load_css(file_name):
-    # Hapus awalan "../" karena Streamlit mengeksekusinya dari folder root
     with open(file_name) as f: 
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 

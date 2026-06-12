@@ -14,7 +14,7 @@ def load_css(file_name):
 
 load_css("style.css")
 
-# 3. SIDEBAR MENU (Mood Active)
+# 3. SIDEBAR MENU 
 with st.sidebar:
     st.markdown("""
 <div class="sidebar-header">
@@ -71,7 +71,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# 6. SKOR MOOD (Empty State: 0/100)
+# 6. SKOR MOOD 
 st.markdown("""
 <div class="mood-score-section">
     <p style="font-family: 'Quicksand'; font-weight: 600; color: #2F595A; margin-bottom:15px;">Skor Mood Hari Ini</p>
@@ -83,7 +83,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# 7. CHART MOOD (Empty State)
+# 7. CHART MOOD 
 st.markdown("""
 <div class="mood-chart-card">
     <div class="mood-chart-title">Fluctuasi Mood 7 Hari</div>
@@ -95,7 +95,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# 8. STATS GRID (Empty State: '-')
+# 8. STATS GRID 
 st.markdown("""
 <div class="mood-stats-grid">
     <div class="mood-stat-card">
@@ -121,7 +121,6 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# 9. CALL TO ACTION CARD (Sudah Terintegrasi Navigasi Ke Jurnal)
 st.markdown("""
 <div class="mood-cta-card">
     <h2>Ingin merasa lebih baik?</h2>
