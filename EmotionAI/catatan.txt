@@ -38,7 +38,9 @@ Pilih:
 .venv/Scripts/python.exe
 
 =================================================
-API KEY masih kosong di .env, jadi isi API KEY Google AI sendiri
+API KEY masih kosong, buat file .env dengan isi seperti ini
+GEMINI_API_KEY="MASUKKAN_API_KEY"
+Isi API KEY milik sendiri
 =================================================
 Untuk menjalankan uji coba chatbot, buka terminal dan input ini
 python app.py
