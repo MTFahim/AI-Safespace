@@ -5,7 +5,7 @@ import re
 import nltk
 from nltk.corpus import stopwords
 
-from emotion_ai.translator import (
+from .translator import (
     preprocess_text
 )
 

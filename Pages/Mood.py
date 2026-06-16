@@ -1,4 +1,13 @@
 import streamlit as st
+from backend.repositories.mood_repository import (
+    MoodRepository
+)
+
+repo = MoodRepository()
+
+moods = repo.get_all()
+
+latest_mood = moods[-1]
 
 # 1. KONFIGURASI HALAMAN
 st.set_page_config(
@@ -78,7 +87,7 @@ st.markdown("""
     <div class="mood-score-circle">
         <img src="https://unpkg.com/lucide-static@latest/icons/smile.svg">
     </div>
-    <h1 class="mood-score-value">0/100</h1>
+    <h1 class="mood-score-value">{latest_mood["score"]}/100</h1>
     <p class="mood-score-trend">Belum ada peningkatan data</p>
 </div>
 """, unsafe_allow_html=True)

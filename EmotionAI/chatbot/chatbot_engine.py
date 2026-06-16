@@ -1,11 +1,11 @@
 from google import genai
 
-from chatbot.config import (
+from .config import (
     GEMINI_API_KEY,
     MODEL_NAME
 )
 
-from chatbot.prompt_builder import (
+from .prompt_builder import (
     build_prompt
 )
 
@@ -15,14 +15,15 @@ client = genai.Client(
 
 def generate_response(
     user_input,
-    journal_profile,
     current_analysis,
-    conversation_history=""
+    conversation_history=None
 ):
+
+    if conversation_history is None:
+        conversation_history = []
 
     prompt = build_prompt(
         user_input,
-        journal_profile,
         current_analysis,
         conversation_history
     )
