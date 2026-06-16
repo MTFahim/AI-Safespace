@@ -1,91 +1,47 @@
-import json
-from pathlib import Path
-from datetime import datetime
+from database.connection import (
+    get_connection
+)
 
 
 class JournalRepository:
 
-    def __init__(self):
-
-        self.file_path = Path(
-            "EmotionAI/data/histories/journal_history.json"
-        )
-
     def get_all(self):
 
-        with open(
-            self.file_path,
-            "r",
-            encoding="utf-8"
-        ) as file:
+        conn = get_connection()
+        cur = conn.cursor()
 
-            return json.load(file)
+        cur.execute("""
+            SELECT
+                id,
+                content,
+                emotion,
+                mood_score,
+                risk_level,
+                sentiment,
+                created_at
+            FROM journals
+            ORDER BY created_at DESC
+        """)
 
-    def find_by_id(self, journal_id):
+        rows = cur.fetchall()
 
-        data = self.get_all()
+        cur.close()
+        conn.close()
 
-        for item in data:
-            if item["id"] == journal_id:
-                return item
+        result = []
 
-        return None
+        for row in rows:
 
-    def save(
-        self,
-        journal,
-        emotion,
-        sentiment
-    ):
-
-        data = self.get_all()
-
-        new_data = {
-            "id": len(data) + 1,
-            "journal": journal,
-            "emotion": emotion,
-            "sentiment": sentiment,
-            "created_at": datetime.now().isoformat()
-        }
-
-        data.append(new_data)
-
-        with open(
-            self.file_path,
-            "w",
-            encoding="utf-8"
-        ) as file:
-
-            json.dump(
-                data,
-                file,
-                indent=4,
-                ensure_ascii=False
+            result.append(
+                {
+                    "id": row[0],
+                    "journal": row[1],
+                    "emotion": row[2],
+                    "mood_score": row[3],
+                    "risk_level": row[4],
+                    "sentiment": row[5],
+                    "created_at": row[6]
+                }
             )
 
-        return new_data
-
-    def delete(self, journal_id):
-
-        data = self.get_all()
-
-        filtered = [
-            item
-            for item in data
-            if item["id"] != journal_id
-        ]
-
-        with open(
-            self.file_path,
-            "w",
-            encoding="utf-8"
-        ) as file:
-
-            json.dump(
-                filtered,
-                file,
-                indent=4,
-                ensure_ascii=False
-            )
-
-        return True
+        return result
