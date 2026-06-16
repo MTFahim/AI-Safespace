@@ -6,7 +6,6 @@ from backend.repositories.safespace_service import (
     process_user_message
 )
 
-
 # CONFIG
 st.set_page_config(
     page_title="Jurnal | AI SafeSpace",
@@ -91,27 +90,28 @@ chat_html = '<div class="chat-container">'
 # Tampilan petunjuk awal jika ruang obrolan masih kosong
 if not st.session_state.chat_history:
     chat_html += """
-    <div style='text-align: center; color: #8D9999; font-family: Nunito Sans; font-size: 14px; margin-top: 40px; margin-bottom: 20px;'>
-        Mulai sesi jurnalmu dengan menceritakan perasaanmu hari ini di kolom bawah.<br>
-        AI SafeSpace akan mendengarkan dan menemanimu.
-    </div>
-    """
+<div style='text-align: center; color: #8D9999; font-family: Nunito Sans; font-size: 14px; margin-top: 40px; margin-bottom: 20px;'>
+    Mulai sesi jurnalmu dengan menceritakan perasaanmu hari ini di kolom bawah.<br>
+    AI SafeSpace akan mendengarkan dan menemanimu.
+</div>
+"""
 
 for chat in st.session_state.chat_history:
+    pesan_teks = str(chat["text"]).replace('\n', '<br>')
     if chat["role"] == "user":
         chat_html += f"""
-        <div class="chat-row-user">
-            <div class="chat-bubble-user">{chat["text"]}</div>
-            <div class="chat-meta-user">Kamu • {chat["time"]}</div>
-        </div>
-        """
+<div class="chat-row-user">
+    <div class="chat-bubble-user">{pesan_teks}</div>
+    <div class="chat-meta-user">Kamu • {chat["time"]}</div>
+</div>
+"""
     else:
         chat_html += f"""
-        <div class="chat-row-ai">
-            <div class="chat-bubble-ai">{chat["text"]}</div>
-            <div class="chat-meta-ai">AI SafeSpace • {chat["time"]}</div>
-        </div>
-        """
+<div class="chat-row-ai">
+    <div class="chat-bubble-ai">{pesan_teks}</div>
+    <div class="chat-meta-ai">AI SafeSpace • {chat["time"]}</div>
+</div>
+"""
 chat_html += '</div>'
 st.markdown(chat_html, unsafe_allow_html=True)
 
@@ -161,12 +161,6 @@ if user_input:
         assistant_response = result["response"]
 
         analysis = result["analysis"]
-
-        with st.chat_message("assistant"):
-
-            st.markdown(
-                assistant_response
-            )
         
         st.session_state.chat_history.append({"role": "ai", "text": assistant_response, "time": datetime.now().strftime("%H:%M")})
     
