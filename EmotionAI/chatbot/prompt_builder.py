@@ -31,27 +31,30 @@ Risk Level: {analysis['risk_level']}
 Mental Health Status: {analysis['mental_health_status']}
 """
 
+def format_history(history):
+
+    if not history:
+        return "Belum ada percakapan sebelumnya."
+
+    result = []
+
+    for msg in history[-10:]:
+
+        role = msg["role"]
+
+        text = msg["text"]
+
+        result.append(
+            f"{role}: {text}"
+        )
+
+    return "\n".join(result)
+
+
 def build_context_summary(
-    journal_profile,
     current_analysis
 ):
     return f"""
-PROFIL JURNAL TERAKHIR
-
-Emotion:
-{journal_profile['analysis']['emotion']}
-
-Mood:
-{journal_profile['analysis']['mood_category']}
-
-Risk:
-{journal_profile['analysis']['risk_level']}
-
-ISI JURNAL:
-
-{journal_profile['journal_text']}
-
-===================
 
 EMOSI PESAN SAAT INI
 
@@ -67,13 +70,14 @@ Risk:
 
 def build_prompt(
     user_input,
-    journal_profile,
     current_analysis,
-    conversation_history=""
+    conversation_history=[]
 ):
     context_summary = build_context_summary(
-    journal_profile,
     current_analysis
+)
+    history_text = format_history(
+    conversation_history
 )
     prompt = f"""
 {SYSTEM_PROMPT}
@@ -82,7 +86,7 @@ def build_prompt(
 
 RIWAYAT PERCAKAPAN
 
-{conversation_history}
+{history_text}
 
 PESAN TERBARU
 

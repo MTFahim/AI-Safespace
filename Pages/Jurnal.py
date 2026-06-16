@@ -1,6 +1,11 @@
 import streamlit as st
 from datetime import datetime
+from EmotionAI.emotion_ai.mentalhealthanalyzer import analyze_user
 from database.jurnal_repository import save_journal
+from backend.repositories.safespace_service import (
+    process_user_message
+)
+
 
 # CONFIG
 st.set_page_config(
@@ -124,7 +129,19 @@ if user_input:
     # Amankan fungsi database backend (Hanya merekam pesan pembuka/utama)
     if st.session_state.is_first_message:
         try:
-            save_journal(user_input)
+            analysis = analyze_user(
+                user_input
+            )
+
+            save_journal(
+                content=user_input,
+                emotion=analysis["emotion"],
+                mood_score=analysis["mood_score"],
+                risk_level=analysis["risk_level"],
+                sentiment=analysis[
+                    "mental_health_status"
+                ]
+            )
             st.session_state.is_first_message = False
         except Exception as e:
             st.toast(f"Peringatan Database: {e}", icon="⚠️")
@@ -134,9 +151,23 @@ if user_input:
         import time
         time.sleep(1.2) # Jeda waktu tiruan berpikir AI
         
-        # Teks tiruan (Dummy) murni untuk memvalidasi posisi gelembung kiri (putih)
-        balasan_dummy = "Ini adalah pesan tiruan dari AI SafeSpace untuk memvalidasi keindahan tata letak gelembung chat sebelah kiri Anda. Ketika integrasi total dilakukan, fungsi ini akan langsung menyemburkan jawaban empatik dari model Gemini!"
+        result = process_user_message(
+            user_input=user_input,
+            conversation_history=
+                st.session_state.chat_history,
+            analysis=analysis
+        )
+
+        assistant_response = result["response"]
+
+        analysis = result["analysis"]
+
+        with st.chat_message("assistant"):
+
+            st.markdown(
+                assistant_response
+            )
         
-        st.session_state.chat_history.append({"role": "ai", "text": balasan_dummy, "time": datetime.now().strftime("%H:%M")})
+        st.session_state.chat_history.append({"role": "ai", "text": assistant_response, "time": datetime.now().strftime("%H:%M")})
     
     st.rerun()

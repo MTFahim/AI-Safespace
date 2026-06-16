@@ -1,6 +1,6 @@
 import json
 
-from emotion_ai.mentalhealthanalyzer import analyze_user
+from ..emotion_ai.mentalhealthanalyzer import analyze_user
 
 def load_journal_profile():
 

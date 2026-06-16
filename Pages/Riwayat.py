@@ -1,4 +1,24 @@
 import streamlit as st
+from backend.repositories.journal_repository import (
+    JournalRepository
+)
+
+repo = JournalRepository()
+
+journals = repo.get_all()
+
+for item in reversed(journals):
+
+    st.markdown(
+        f"""
+        ### {item['emotion']}
+
+        {item['journal']}
+
+        Sentiment:
+        {item['sentiment']}
+        """
+    )
 
 st.set_page_config(
     page_title="Riwayat | AI SafeSpace",
