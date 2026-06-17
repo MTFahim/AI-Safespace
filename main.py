@@ -154,6 +154,7 @@ with col_header:
 with col_sos:
     if st.button("🚨 SOS", type="primary", use_container_width=True):
         tampilkan_sos()
+        
 # HERO CARD 
 st.markdown("""
 <div class="hero-card">

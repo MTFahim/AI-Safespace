@@ -81,6 +81,96 @@ def load_css(file_name):
 
 load_css("style.css")
 
+@st.dialog("🚨 Bantuan Darurat")
+def tampilkan_sos():
+    
+    st.markdown("""
+<div class="sos-header">
+    <div class="sos-title">Kami di sini untukmu.</div>
+    <div class="sos-subtitle">Pilih teknik relaksasi atau hubungi bantuan.</div>
+</div>
+""", unsafe_allow_html=True)
+    
+    tab1, tab2, tab3 = st.tabs(["Pernapasan", "Grounding", "Hotline"])
+    
+    with tab1:
+        st.markdown("""
+<div class="sos-content">
+    <div class="sos-header-inline">
+        <img src="https://unpkg.com/lucide-static@latest/icons/wind.svg" style="width: 24px; margin-right: 8px; filter: invert(39%) sepia(19%) saturate(1211%) hue-rotate(100deg) brightness(91%) contrast(87%);">
+        <div class="sos-tab-title" style="margin-bottom: 0;">Teknik Relaksasi 4-7-8</div>
+    </div>
+    <p>Metode cepat untuk menurunkan detak jantung dan meredakan panik.</p>
+    <div class="sos-list-item">
+        <img src="https://unpkg.com/lucide-static@latest/icons/arrow-down-circle.svg" class="sos-icon-small">
+        <div><b>Tarik napas</b> dari hidung perlahan (4 detik).</div>
+    </div>
+    <div class="sos-list-item">
+        <img src="https://unpkg.com/lucide-static@latest/icons/pause-circle.svg" class="sos-icon-small">
+        <div><b>Tahan napas</b> di dalam dada (7 detik).</div>
+    </div>
+    <div class="sos-list-item">
+        <img src="https://unpkg.com/lucide-static@latest/icons/arrow-up-circle.svg" class="sos-icon-small">
+        <div><b>Hembuskan napas</b> perlahan dari mulut (8 detik).</div>
+    </div>
+    <p style="margin-top: 15px;"><i>Ulangi 3-4 kali siklus sampai terasa lebih tenang.</i></p>
+</div>
+""", unsafe_allow_html=True)
+        
+    with tab2:
+        st.markdown("""
+<div class="sos-content">
+    <div class="sos-header-inline">
+        <img src="https://unpkg.com/lucide-static@latest/icons/leaf.svg" style="width: 24px; margin-right: 8px; filter: invert(39%) sepia(19%) saturate(1211%) hue-rotate(100deg) brightness(91%) contrast(87%);">
+        <div class="sos-tab-title" style="margin-bottom: 0;">Teknik 5-4-3-2-1</div>
+    </div>
+    <p>Bawa kembali pikiranmu ke saat ini agar tidak kewalahan.</p>
+    <div class="sos-list-item">
+        <img src="https://unpkg.com/lucide-static@latest/icons/eye.svg" class="sos-icon-small">
+        <div>Sebutkan <b>5 benda</b> yang bisa kamu lihat.</div>
+    </div>
+    <div class="sos-list-item">
+        <img src="https://unpkg.com/lucide-static@latest/icons/hand.svg" class="sos-icon-small">
+        <div>Sebutkan <b>4 hal</b> yang bisa kamu sentuh/rasakan.</div>
+    </div>
+    <div class="sos-list-item">
+        <img src="https://unpkg.com/lucide-static@latest/icons/volume-2.svg" class="sos-icon-small">
+        <div>Sebutkan <b>3 suara</b> yang bisa kamu dengar.</div>
+    </div>
+    <div class="sos-list-item">
+        <img src="https://unpkg.com/lucide-static@latest/icons/flower-2.svg" class="sos-icon-small">
+        <div>Sebutkan <b>2 bau</b> yang bisa kamu cium.</div>
+    </div>
+    <div class="sos-list-item">
+        <img src="https://unpkg.com/lucide-static@latest/icons/coffee.svg" class="sos-icon-small">
+        <div>Sebutkan <b>1 rasa</b> yang bisa kamu kecap di lidah.</div>
+    </div>
+</div>
+""", unsafe_allow_html=True)
+        
+    with tab3:
+        st.markdown("""
+<div class="sos-content">
+    <div class="sos-header-inline">
+        <img src="https://unpkg.com/lucide-static@latest/icons/life-buoy.svg" style="width: 24px; margin-right: 8px; filter: invert(39%) sepia(19%) saturate(1211%) hue-rotate(100deg) brightness(91%) contrast(87%);">
+        <div class="sos-tab-title" style="margin-bottom: 0;">Layanan Bantuan 24 Jam</div>
+    </div>
+    <p style="margin-bottom: 15px;">Kamu tidak sendirian. Jangan ragu untuk mencari bantuan profesional.</p>
+    <div class="sos-contact-box">
+        <img src="https://unpkg.com/lucide-static@latest/icons/phone-call.svg" class="sos-icon">
+        <div><b>Layanan Sejiwa (Kemenkes):</b> 119 (ext. 8)</div>
+    </div>
+    <div class="sos-contact-box">
+        <img src="https://unpkg.com/lucide-static@latest/icons/hospital.svg" class="sos-icon">
+        <div><b>IGD RSJ Menur Surabaya:</b> (031) 5312066</div>
+    </div>
+    <div class="sos-contact-box">
+        <img src="https://unpkg.com/lucide-static@latest/icons/message-circle.svg" class="sos-icon">
+        <div><b>Yayasan Pulih (WA):</b> 0811-8449-445</div>
+    </div>
+</div>
+""", unsafe_allow_html=True)
+
 # 3. SIDEBAR MENU 
 with st.sidebar:
     st.markdown("""
@@ -118,17 +208,19 @@ with st.sidebar:
 </div>
     """, unsafe_allow_html=True)
 
-# 4. HEADER & SOS BUTTON
-st.markdown("""
-<div class="header-container">
-    <div class="header-left">
+# HEADER & TOMBOL SOS (NATIVE STREAMLIT)
+col_header, col_sos = st.columns([10, 1.2])
+
+with col_header:
+    st.markdown("""
+    <div class="header-left" style="margin-top: 5px;">
         <div class="header-title">AI SafeSpace</div>
     </div>
-    <div class="sos-button" title="Mode Darurat / SOS">
-        <img src="https://unpkg.com/lucide-static@latest/icons/siren.svg" class="sos-icon">
-    </div>
-</div>
-""", unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
+
+with col_sos:
+    if st.button("🚨 SOS", type="primary", use_container_width=True):
+        tampilkan_sos()
 
 # 5. JUDUL HALAMAN
 st.markdown("""
