@@ -156,12 +156,10 @@ if user_input:
             user_input=user_input,
             conversation_history=
                 st.session_state.chat_history,
-            analysis=analysis
+            analisis=analysis
         )
 
         assistant_response = result["response"]
-
-        analysis = result["analysis"]
 
         with st.chat_message("assistant"):
 

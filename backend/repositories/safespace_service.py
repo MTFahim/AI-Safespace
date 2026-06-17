@@ -8,7 +8,7 @@ from EmotionAI.chatbot.chatbot_engine import (
 def process_user_message(
     user_input,
     conversation_history,
-    analysis
+    analisis
 ):
     """
     Fungsi utama AI SafeSpace.
@@ -26,11 +26,11 @@ def process_user_message(
 
     response = generate_response(
         user_input=user_input,
-        current_analysis=analysis,
+        current_analysis=analisis,
         conversation_history=conversation_history
     )
 
     return {
         "response": response,
-        "analysis": analysis
+        "analysis": analisis
     }
