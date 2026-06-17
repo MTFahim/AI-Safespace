@@ -122,6 +122,20 @@ user_input = st.chat_input("Ceritakan perasaanmu hari ini secara mendalam...")
 
 if user_input:
     waktu_sekarang = datetime.now().strftime("%H:%M")
+
+    analysis = analyze_user(
+        user_input
+        )
+
+    save_journal(
+        content=user_input,
+        emotion=analysis["emotion"],
+        mood_score=analysis["mood_score"],
+        risk_level=analysis["risk_level"],
+        sentiment=analysis[
+            "mental_health_status"
+            ]
+        )
     
     # Masukkan teks user ke session state agar langsung terender di kanan (hijau)
     st.session_state.chat_history.append({"role": "user", "text": user_input, "time": waktu_sekarang})
@@ -129,19 +143,6 @@ if user_input:
     # Amankan fungsi database backend (Hanya merekam pesan pembuka/utama)
     if st.session_state.is_first_message:
         try:
-            analysis = analyze_user(
-                user_input
-            )
-
-            save_journal(
-                content=user_input,
-                emotion=analysis["emotion"],
-                mood_score=analysis["mood_score"],
-                risk_level=analysis["risk_level"],
-                sentiment=analysis[
-                    "mental_health_status"
-                ]
-            )
             st.session_state.is_first_message = False
         except Exception as e:
             st.toast(f"Peringatan Database: {e}", icon="⚠️")
