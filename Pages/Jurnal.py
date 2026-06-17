@@ -156,16 +156,10 @@ if user_input:
             user_input=user_input,
             conversation_history=
                 st.session_state.chat_history,
-            analisis=analysis
+            analysis=analysis
         )
 
         assistant_response = result["response"]
-
-        with st.chat_message("assistant"):
-
-            st.markdown(
-                assistant_response
-            )
         
         st.session_state.chat_history.append({"role": "ai", "text": assistant_response, "time": datetime.now().strftime("%H:%M")})
     
