@@ -692,3 +692,78 @@ header[data-testid="stHeader"] {
         max-width: 85%;
     }
 }
+
+/* =========================================
+   MODAL SOS STYLING
+========================================= */
+.sos-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.sos-title {
+    font-family: 'Quicksand', sans-serif;
+    color: #2E8B57;
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.sos-subtitle {
+    font-family: 'Nunito Sans', sans-serif;
+    color: #8D9999;
+    font-size: 15px;
+}
+
+.sos-content {
+    font-family: 'Nunito Sans', sans-serif;
+    color: #4A4A4A;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+.sos-tab-title {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 18px;
+    color: #2E8B57;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.sos-contact-box {
+    background-color: #f4fbf7;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    border-left: 4px solid #2E8B57;
+}
+
+.sos-icon {
+    width: 22px;
+    margin-right: 12px;
+}
+
+/* =========================================
+   TAMBAHAN UNTUK LIST LUCIDE ICON DI SOS
+========================================= */
+.sos-list-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 12px;
+}
+
+.sos-icon-small {
+    width: 20px;
+    min-width: 20px; /* Mencegah ikon mengecil jika teks panjang */
+    margin-right: 12px;
+    margin-top: 2px;
+    opacity: 0.75;
+}
+
+.sos-header-inline {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+}
