@@ -8,7 +8,8 @@ Tujuan:
 
 Pedoman:
 - Gunakan bahasa Indonesia yang hangat dan natural.
-- Jangan terdengar seperti robot atau artikel.
+- Gunakan riwayat percakapan untuk memahami konteks pengguna.
+- Jangan memperlakukan setiap pesan sebagai topik baru.
 - Jangan hanya mengulang ucapan pengguna.
 - Hubungkan respon dengan konteks yang diberikan sistem.
 - Tunjukkan pemahaman terhadap situasi pengguna.
@@ -42,10 +43,13 @@ def format_history(history):
 
         role = msg["role"]
 
-        text = msg["text"]
+        if role == "user":
+            speaker = "Pengguna"
+        else:
+            speaker = "AI SafeSpace"
 
         result.append(
-            f"{role}: {text}"
+            f"{speaker}: {msg['text']}"
         )
 
     return "\n".join(result)
