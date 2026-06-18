@@ -1,0 +1,9 @@
+pip install google-genai
+pip install streamlit
+pip install pandas
+pip install numpy
+pip install scikit-learn
+pip install joblib
+pip install python-dotenv
+pip install deep-translator
+pip install nltk
