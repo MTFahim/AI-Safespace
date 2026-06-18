@@ -767,3 +767,67 @@ header[data-testid="stHeader"] {
     align-items: center;
     margin-bottom: 12px;
 }
+
+/* =========================================
+   MODAL RIWAYAT INTERAKTIF (ACCORDION)
+========================================= */
+/* Container Utama Kartu Accordion */
+details.riwayat-accordion {
+    background-color: #ffffff;
+    border: 1px solid #eef2f0;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+/* Efek visual saat kartu sedang diklik terbuka */
+details.riwayat-accordion[open] {
+    border-color: #2E8B57;
+    box-shadow: 0 4px 15px rgba(46, 139, 87, 0.08);
+}
+
+/* Menyembunyikan panah/segitiga default bawaan browser */
+details.riwayat-accordion > summary {
+    list-style: none; 
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+}
+details.riwayat-accordion > summary::-webkit-details-marker {
+    display: none; 
+}
+
+/* Wadah Pengatur Tata Letak Fleksibel di Dalam Kartu Header */
+.riwayat-card-header-flex {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+/* Animasi Putar Komponen Panah Kanan Lucide Icons */
+.riwayat-arrow {
+    width: 24px;
+    height: 24px;
+    transition: transform 0.3s ease;
+    filter: invert(56%) sepia(8%) saturate(417%) hue-rotate(134deg) brightness(92%) contrast(87%);
+}
+
+/* Memutar panah ke atas (180 derajat) saat elemen details berstatus [open] */
+details.riwayat-accordion[open] .riwayat-arrow {
+    transform: rotate(180deg);
+}
+
+/* Efek hover saat kursor berada di atas kartu */
+details.riwayat-accordion > summary:hover {
+    background-color: #fdfefe;
+}
+
+/* Area Ruang Detail Chat Lengkap di Sisi Dalam Kartu */
+.riwayat-detail-content {
+    padding: 20px;
+    border-top: 1px solid #eef2f0;
+    background-color: #fcfdfe;
+}
