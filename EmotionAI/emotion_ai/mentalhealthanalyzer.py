@@ -38,6 +38,23 @@ IGNORE_TERMS = {
     "used to"
 }
 
+NEGATIONS = {
+    "no",
+    "not",
+    "never",
+    "don't",
+    "dont",
+    "can't",
+    "cant",
+    "won't",
+    "wont"
+}
+
+for word in NEGATIONS:
+    stop_words.discard(word)
+
+NEGATION_WINDOW = 3
+
 def calculate_valence(text):
 
     text = text.lower()
@@ -53,55 +70,74 @@ def calculate_valence(text):
 
         found = False
 
-        # ==========================
-        # PRIORITAS TRIGRAM (3 kata)
-        # ==========================
+        # =================
+        # TRIGRAM
+        # =================
+
         if i + 2 < len(words):
 
             trigram = f"{words[i]} {words[i+1]} {words[i+2]}"
 
             if trigram in nrc_vad:
 
-                if trigram not in IGNORE_TERMS:
-                    scores.append(nrc_vad[trigram])
-                    matched_terms.append(trigram)
+                score = nrc_vad[trigram]
+
+                for j in range(max(0, i - NEGATION_WINDOW), i):
+                    if words[j] in NEGATIONS:
+                        score = -score
+                        break
+
+                scores.append(score)
+                matched_terms.append(trigram)
 
                 i += 3
                 found = True
 
-        # ==========================
-        # PRIORITAS BIGRAM (2 kata)
-        # ==========================
+        # =================
+        # BIGRAM
+        # =================
+
         if not found and i + 1 < len(words):
 
             bigram = f"{words[i]} {words[i+1]}"
 
             if bigram in nrc_vad:
 
-                if bigram not in IGNORE_TERMS:
-                    scores.append(nrc_vad[bigram])
-                    matched_terms.append(bigram)
+                score = nrc_vad[bigram]
+
+                for j in range(max(0, i - NEGATION_WINDOW), i):
+                    if words[j] in NEGATIONS:
+                        score = -score
+                        break
+
+                scores.append(score)
+                matched_terms.append(bigram)
 
                 i += 2
                 found = True
 
-        # ==========================
-        # UNIGRAM (1 kata)
-        # ==========================
+        # =================
+        # UNIGRAM
+        # =================
+
         if not found:
 
             word = words[i]
 
-            # skip stopwords
-            if word not in stop_words:
+            if word not in stop_words and word in nrc_vad:
 
-                if word in nrc_vad:
-                    scores.append(nrc_vad[word])
-                    matched_terms.append(word)
+                score = nrc_vad[word]
+
+                for j in range(max(0, i - NEGATION_WINDOW), i):
+                    if words[j] in NEGATIONS:
+                        score = -score
+                        break
+
+                scores.append(score)
+                matched_terms.append(word)
 
             i += 1
 
-    # jika tidak ada term yang cocok
     if len(scores) == 0:
         return 0, []
 
@@ -118,22 +154,90 @@ def valence_to_mood_score(valence):
 
     return mood_score
 
+HIGH_RISK_PHRASES = [
+    "give up",
+    "hopeless",
+    "worthless",
+    "no meaning",
+    "meaningless",
+    "nothing matters",
+    "can't go on",
+    "cannot go on",
+    "don't want to live",
+    "want to disappear",
+    "end it all",
+    "want to die",
+    "kill myself",
+    "suicide"
+]
+
+def analyze_risk(text):
+
+    text_lower = text.lower()
+
+    for phrase in HIGH_RISK_PHRASES:
+
+        if phrase in text_lower:
+
+            return {
+                "risk": "high",
+                "confidence": 95.0,
+                "trigger": phrase
+            }
+
+    text_tfidf = risk_vectorizer.transform([text])
+
+    prediction = risk_model.predict(text_tfidf)[0]
+
+    confidence = float(
+        max(
+            risk_model.predict_proba(text_tfidf)[0]
+        ) * 100
+    )
+
+    return {
+        "risk": prediction,
+        "confidence": round(confidence, 2)
+    }
+
 def analyze_emotion(text):
 
     text_tfidf = emotion_vectorizer.transform([text])
 
-    emotion = emotion_model.predict(text_tfidf)[0]
+    probabilities = emotion_model.predict_proba(text_tfidf)[0]
+
+    predicted_idx = probabilities.argmax()
+
+    emotion = emotion_model.classes_[predicted_idx]
 
     confidence = float(
-        max(emotion_model.predict_proba(text_tfidf)[0]) * 100
+        probabilities[predicted_idx] * 100
     )
 
+    # Ambil 2 probabilitas tertinggi
+    sorted_probs = sorted(
+        probabilities,
+        reverse=True
+    )
+
+    top1 = sorted_probs[0] * 100
+    top2 = sorted_probs[1] * 100
+
+    gap = top1 - top2
+
+    # Reliability
     if confidence >= 80:
         emotion_reliability = "high"
+
     elif confidence >= 50:
         emotion_reliability = "medium"
+
     else:
         emotion_reliability = "low"
+
+    
+    if confidence < 50 and gap < 15:
+        emotion = "mixed"
 
     valence, matched_terms = calculate_valence(text)
 
@@ -147,23 +251,6 @@ def analyze_emotion(text):
         "mood_score": round(mood_score, 3),
         "matched_terms": matched_terms
     }
-
-
-def analyze_risk(text):
-
-    text_tfidf = risk_vectorizer.transform([text])
-
-    prediction = risk_model.predict(text_tfidf)[0]
-
-    confidence = float(
-        max(risk_model.predict_proba(text_tfidf)[0]) * 100
-    )
-
-    return {
-        "risk": prediction,
-        "confidence": round(confidence, 2)
-    }
-
 
 def get_mood_category(mood_score):
 
@@ -206,10 +293,13 @@ def get_mental_health_status(
     if risk == "suicide":
         return "high suicide risk"
 
-    if mood_score <= 4:
+    if mood_score <= 3:
+        return "severe negative emotional state"
+
+    if mood_score <= 5:
         return "negative emotional state"
 
-    if emotion in ["joy", "love", "suprise"] and mood_score >= 7:
+    if emotion in ["joy", "love"] and mood_score >= 7:
         return "positive emotional state"
 
     return "stable emotional state"

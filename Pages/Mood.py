@@ -55,17 +55,20 @@ else:
 
 mental_status = stats["mental_status"]
 
-if mental_status == "Healthy":
-    mental_label = "Baik"
+if mental_status == "high suicide risk":
+    mental_label = "🚨 Butuh Bantuan Segera"
 
-elif mental_status == "Moderate":
-    mental_label = "Perlu Perhatian"
+elif mental_status == "negative emotional state":
+    mental_label = "💛 Butuh Dukungan"
 
-elif mental_status == "High Risk":
-    mental_label = "Risiko Tinggi"
+elif mental_status == "positive emotional state":
+    mental_label = "✨ Sangat Baik"
+
+elif mental_status == "stable emotional state":
+    mental_label = "🟢 Stabil"
 
 else:
-    mental_label = "-"
+    mental_label = "Data Belum Tersedia"
 
 # 1. KONFIGURASI HALAMAN
 st.set_page_config(
@@ -336,8 +339,8 @@ st.markdown(f"""
 
 st.markdown("""
 <div class="mood-cta-card">
-    <h2>Ingin merasa lebih baik?</h2>
-    <p>Cobalah sesi "Relaksasi Cepat" selama 5 menit untuk membantu menjernihkan pikiran.</p>
+    <h2>Punya banyak hal di pikiran?</h2>
+    <p>Luangkan waktu 5 menit untuk menceritakan apa yang sedang kamu rasakan. Kami di sini siap mendengarkan tanpa menghakimi.</p>
     <a href="/Jurnal" target="_self" style="text-decoration: none;">
         <button class="btn-mulai-sesi">Mulai Sekarang</button>
     </a>

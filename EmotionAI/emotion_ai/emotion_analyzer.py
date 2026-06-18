@@ -26,6 +26,40 @@ nrc_vad = dict(
     )
 )
 
+phrase_terms = [
+    term
+    for term in nrc_vad.keys()
+    if isinstance(term, str) and " " in term
+]
+
+phrase_terms_sorted = sorted(
+    phrase_terms,
+    key=len,
+    reverse=True
+)
+
+def find_best_phrases(text):
+
+    text = text.lower()
+
+    found = []
+
+    used_text = text
+
+    for phrase in phrase_terms_sorted:
+
+        if phrase in used_text:
+
+            found.append(
+                (phrase, nrc_vad[phrase])
+            )
+
+            used_text = used_text.replace(
+                phrase,
+                " "
+            )
+
+    return found
 
 try:
     nltk.data.find('corpora/stopwords')
@@ -43,6 +77,21 @@ IGNORE_TERMS = {
     "used to"
 }
 
+NEGATIONS = {
+    "no",
+    "not",
+    "never",
+    "don't",
+    "dont",
+    "can't",
+    "cant",
+    "won't",
+    "wont"
+}
+
+for word in NEGATIONS:
+    stop_words.discard(word)
+
 def calculate_valence(text):
 
     text = text.lower()
@@ -58,9 +107,8 @@ def calculate_valence(text):
 
         found = False
 
-        # ==========================
-        # PRIORITAS TRIGRAM (3 kata)
-        # ==========================
+        # TRIGRAM (3 kata)
+
         if i + 2 < len(words):
 
             trigram = f"{words[i]} {words[i+1]} {words[i+2]}"
@@ -74,9 +122,8 @@ def calculate_valence(text):
                 i += 3
                 found = True
 
-        # ==========================
-        # PRIORITAS BIGRAM (2 kata)
-        # ==========================
+        # BIGRAM (2 kata)
+
         if not found and i + 1 < len(words):
 
             bigram = f"{words[i]} {words[i+1]}"
@@ -90,21 +137,26 @@ def calculate_valence(text):
                 i += 2
                 found = True
 
-        # ==========================
-        # UNIGRAM (1 kata)
-        # ==========================
-        if not found:
+     # UNIGRAM (1 kata)
 
-            word = words[i]
+    if not found:
 
-            # skip stopwords
-            if word not in stop_words:
+        word = words[i]
 
-                if word in nrc_vad:
-                    scores.append(nrc_vad[word])
-                    matched_terms.append(word)
+        if word not in stop_words:
 
-            i += 1
+            if word in nrc_vad:
+
+                score = nrc_vad[word]
+
+                # cek apakah kata sebelumnya negation
+                if i > 0 and words[i - 1] in NEGATIONS:
+                        score = -score
+
+                scores.append(score)
+                matched_terms.append(word)
+
+        i += 1
 
     # jika tidak ada term yang cocok
     if len(scores) == 0:

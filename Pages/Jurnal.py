@@ -227,13 +227,18 @@ if user_input:
         import time
         time.sleep(1.2)
         
-        result = process_user_message(
-            user_input=user_input,
-            conversation_history=st.session_state.chat_history,
-            analysis=analysis
-        )
-        assistant_response = result["response"]
+        try:
+            result = process_user_message(
+                user_input=user_input,
+                conversation_history=st.session_state.chat_history,
+                analysis=analysis
+            )
+            assistant_response = result["response"]
         
+        except Exception as e:
+            st.error(f"Error occurred while processing user message: {e}")
+            assistant_response = "Maaf, AI sedang mengalami gangguan. \nSilakan coba lagi nanti."
+
         # Simpan respons nyata AI ke history lokal
         st.session_state.chat_history.append({"role": "ai", "text": assistant_response, "time": datetime.now().strftime("%H:%M")})
     
